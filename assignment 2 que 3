@@ -1,0 +1,91 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Define the structure to hold the bank account details
+struct BankMgmt {
+    int AccNumber;      // Account number
+    string CustName;    // Customer name
+    double AvlBalance;  // Available balance
+    string AccType;     // Account type (e.g., "Savings", "Checking")
+};
+
+// Function to handle withdrawal (pass-by-pointer)
+void withdrawal(BankMgmt *account, double amount) {
+    if (amount > account->AvlBalance) {
+        cout << "Error: Insufficient balance for withdrawal!" << endl;
+    } else {
+        account->AvlBalance -= amount;  // Modify the original account's AvlBalance using pointer
+        cout << "Withdrawal successful! New balance: " << account->AvlBalance << endl;
+    }
+}
+
+// Function to handle deposit (pass-by-pointer)
+void deposit(BankMgmt *account, double amount) {
+    account->AvlBalance += amount;  // Modify the original account's AvlBalance using pointer
+    cout << "Deposit successful! New balance: " << account->AvlBalance << endl;
+}
+
+// Function to display account details and current balance (pass-by-pointer)
+void displayBalance(BankMgmt *account) {
+    cout << "Account Number: " << account->AccNumber << endl;
+    cout << "Customer Name: " << account->CustName << endl;
+    cout << "Account Type: " << account->AccType << endl;
+    cout << "Available Balance: " << account->AvlBalance << endl;
+}
+
+int main() {
+    BankMgmt account;  // Declare an object of the structure
+
+    // Initialize the account details
+    cout << "Enter Account Number: ";
+    cin >> account.AccNumber;
+    cin.ignore();  // to clear the input buffer after reading integer
+    cout << "Enter Customer Name: ";
+    getline(cin, account.CustName);  // To read the full name with spaces
+    cout << "Enter Account Type (e.g., Savings, Checking): ";
+    getline(cin, account.AccType);
+    cout << "Enter Available Balance: ";
+    cin >> account.AvlBalance;
+
+    int choice;
+    double amount;
+
+    do {
+        // Displaying the menu
+        cout << "\nBank Management Menu:\n";
+        cout << "1. Withdrawal\n";
+        cout << "2. Deposit\n";
+        cout << "3. Display Balance\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                // Withdrawal operation
+                cout << "Enter withdrawal amount: ";
+                cin >> amount;
+                withdrawal(&account, amount);  // Pass the address of 'account' using pointer
+                break;
+            case 2:
+                // Deposit operation
+                cout << "Enter deposit amount: ";
+                cin >> amount;
+                deposit(&account, amount);  // Pass the address of 'account' using pointer
+                break;
+            case 3:
+                // Display balance and account details
+                displayBalance(&account);  // Pass the address of 'account' using pointer
+                break;
+            case 4:
+                // Exit the program
+                cout << "Exiting the Bank Management System. Goodbye!" << endl;
+                break;
+            default:
+                cout << "Invalid choice! Please try again." << endl;
+        }
+    } while (choice != 4);
+
+    return 0;
+}
