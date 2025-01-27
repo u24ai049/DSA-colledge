@@ -1,94 +1,79 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Function to read a matrix
-void readMatrix(int ***matrix, int rows, int cols) {
-    *matrix = (int **)malloc(rows * sizeof(int *));  // Allocate memory for row pointers
+int main() {
+    int **A, **B, **C;
+    int i, j, k;
+    int m, n, p, q;
 
-    for (int i = 0; i < rows; i++) {
-        (*matrix)[i] = (int *)malloc(cols * sizeof(int));  // Allocate memory for each row (columns)
-        printf("Enter elements for row %d: \n", i + 1);
-        for (int j = 0; j < cols; j++) {
-            scanf("%d", &(*matrix)[i][j]);  // Read matrix elements
+    printf("enter the number of rows and columns for matrix A");
+    scanf("%d %d", &m, &n);
+    printf("enter the number of rows and columns for matrix B");
+    scanf("%d %d", &p, &q);
+    A = (int**)malloc(m * sizeof(int*));
+    B = (int**)malloc(p * sizeof(int*));
+    C = (int**)malloc(m * sizeof(int*));
+    for (i=0;i<m;i++) {
+        A[i]=(int*)malloc(n * sizeof(int));
+    }
+    for (i=0;i<p;i++)
+    {
+        B[i] =(int*)malloc(q * sizeof(int));
+    }
+    for (i =0; i< m;i++) {
+        C[i] = (int*)malloc(q * sizeof(int));
+    }
+
+    printf("enter the elements of matrix A (%dx%d)\n", m, n);
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+            printf("A[%d][%d]: ", i + 1, j + 1);
+            scanf("%d", &A[i][j]);
         }
     }
-}
 
-// Function to multiply two matrices
-void multiplyMatrices(int **matrixA, int **matrixB, int ***result, int A_rows, int A_cols, int B_rows, int B_cols) {
-    // If the number of columns of matrix A is not equal to the number of rows of matrix B, multiplication is not possible
-    if (A_cols != B_rows) {
-        printf("Matrix multiplication not possible. The number of columns of matrix A must be equal to the number of rows of matrix B.\n");
-        exit(1);
+    printf("enter the elements of matrix B (%dx%d)\n", p, q);
+    for (i = 0; i < p; i++) {
+        for (j = 0; j < q; j++) {
+            printf("B[%d][%d]: ", i + 1, j + 1);
+            scanf("%d", &B[i][j]);
+        }
     }
 
-    // Allocate memory for the result matrix
-    *result = (int **)malloc(A_rows * sizeof(int *));  // Allocate memory for result matrix rows
-    for (int i = 0; i < A_rows; i++) {
-        (*result)[i] = (int *)malloc(B_cols * sizeof(int));  // Allocate memory for each row (columns)
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < q; j++) {
+            C[i][j] = 0;
+        }
     }
 
-    // Perform matrix multiplication
-    for (int i = 0; i < A_rows; i++) {
-        for (int j = 0; j < B_cols; j++) {
-            (*result)[i][j] = 0;  // Initialize result cell to 0
-            for (int k = 0; k < A_cols; k++) {
-                (*result)[i][j] += matrixA[i][k] * matrixB[k][j];  // Matrix multiplication logic
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < q; j++) {
+            for (k = 0; k < n; k++) {
+                C[i][j] += A[i][k] * B[k][j];
             }
         }
     }
-}
 
-// Function to display a matrix
-void displayMatrix(int **matrix, int rows, int cols) {
-    printf("\nThe Matrix is:\n");
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            printf("%d ", matrix[i][j]);  // Print each element of the matrix
+    printf("\n multiplication (A * B = C):\n");
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < q; j++) {
+            printf("%d ", C[i][j]);
         }
         printf("\n");
     }
-}
 
-int main() {
-    int **matrixA, **matrixB, **resultMatrix;
-    int A_rows, A_cols, B_rows, B_cols;
-
-    // Read dimensions for Matrix A
-    printf("Enter the number of rows and columns for Matrix A: ");
-    scanf("%d %d", &A_rows, &A_cols);
-
-    // Read Matrix A
-    readMatrix(&matrixA, A_rows, A_cols);
-
-    // Read dimensions for Matrix B
-    printf("Enter the number of rows and columns for Matrix B: ");
-    scanf("%d %d", &B_rows, &B_cols);
-
-    // Read Matrix B
-    readMatrix(&matrixB, B_rows, B_cols);
-
-    // Multiply matrices and store the result
-    multiplyMatrices(matrixA, matrixB, &resultMatrix, A_rows, A_cols, B_rows, B_cols);
-
-    // Display the resultant matrix
-    displayMatrix(resultMatrix, A_rows, B_cols);
-
-    // Free dynamically allocated memory
-    for (int i = 0; i < A_rows; i++) {
-        free(matrixA[i]);
+    for (i = 0; i < m; i++) {
+        free(A[i]);
     }
-    free(matrixA);
-
-    for (int i = 0; i < B_rows; i++) {
-        free(matrixB[i]);
+    for (i = 0; i < p; i++) {
+        free(B[i]);
     }
-    free(matrixB);
-
-    for (int i = 0; i < A_rows; i++) {
-        free(resultMatrix[i]);
+    for (i = 0; i < m; i++) {
+        free(C[i]);
     }
-    free(resultMatrix);
+    free(A);
+    free(B);
+    free(C);
 
-    return 0;
+    
 }
