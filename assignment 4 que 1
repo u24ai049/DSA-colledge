@@ -1,0 +1,76 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class node {
+public:
+    int data;
+    node* next;
+    node(int data1) {
+        data = data1;
+        next = nullptr;
+    }
+};
+
+void display(node* head) {
+    node* temp = head;
+    while (temp != nullptr) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+node* rotate(node* head, int k) {
+    if (head == nullptr || head->next == nullptr || k == 0) {
+        return head;  // No rotation needed if list is empty, has only one node, or k is 0
+    }
+
+    // Step 1: Find the length of the list
+    node* temp = head;
+    int length = 1;
+    while (temp->next != nullptr) {
+        temp = temp->next;
+        length++;
+    }
+
+    // Step 2: Make the list circular by connecting the last node to the head
+    temp->next = head;
+
+    // Step 3: Get the effective rotation (k % length)
+    k = k % length;
+    if (k == 0) {
+        temp->next = nullptr;  // If no rotation needed, break the circular link
+        return head;
+    }
+
+    // Step 4: Traverse to the (length - k)th node (the node before the new head)
+    node* current = head;
+    for (int i = 1; i < k; i++) {
+        current = current->next;
+    }
+
+    // Step 5: The new head will be the node after (length - k)th node
+    node* newHead = current->next;
+    current->next = nullptr;  // Break the circular list at the correct point
+
+    return newHead;
+}
+
+int main() {
+    node* head = new node(10);
+    head->next = new node(20);
+    head->next->next = new node(30);
+    head->next->next->next = new node(40);
+    head->next->next->next->next = new node(50);
+
+    cout << "Original linked list: ";
+    display(head);
+
+    int k = 2;  // Rotate by 2 nodes
+    node* newhead = rotate(head, k);
+
+    cout << "Linked list after rotating counter-clockwise by " << k << " nodes: ";
+    display(newhead);
+
+    return 0;
+}
