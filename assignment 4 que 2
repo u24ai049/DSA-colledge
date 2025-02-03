@@ -1,0 +1,93 @@
+#include <iostream>
+#include <unordered_set>
+using namespace std;
+
+class node {
+public:
+    int data;
+    node* next;
+
+    // Constructor to initialize a node
+    node(int data1) {
+        data = data1;
+        next = nullptr;
+    }
+};
+
+// Function to display the linked list
+void display(node* head) {
+    node* temp = head;
+    while (temp != nullptr) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+// Function to remove duplicates from the unsorted linked list
+void removeDuplicates(node* head) {
+    unordered_set<int> seen;  // To track seen values
+    node* current = head;
+    node* prev = nullptr;
+
+    while (current != nullptr) {
+        // If the value is already seen, remove the current node
+        if (seen.find(current->data) != seen.end()) {
+            prev->next = current->next;
+            delete current;  // Free memory for the current node
+        } else {
+            // Otherwise, add the value to the set
+            seen.insert(current->data);
+            prev = current;
+        }
+        current = prev->next;  // Move to the next node
+    }
+}
+
+// Function to take input from the user and create a linked list
+node* takeInput() {
+    int data;
+    node* head = nullptr;
+    node* tail = nullptr;
+
+    cout << "Enter the values for the linked list (enter -1 to stop):\n";
+    while (true) {
+        cin >> data;
+
+        // Stop input if the user enters -1
+        if (data == -1) {
+            break;
+        }
+
+        node* newNode = new node(data);  // Create a new node with the entered data
+
+        // If the list is empty, make the new node the head
+        if (head == nullptr) {
+            head = newNode;
+            tail = head;  // Tail also points to head if it's the first node
+        } else {
+            tail->next = newNode;  // Link the last node to the new node
+            tail = newNode;  // Update the tail to the new node
+        }
+    }
+
+    return head;  // Return the head of the linked list
+}
+
+int main() {
+    // Take input to create the linked list
+    node* head = takeInput();
+
+    // Display the original linked list
+    cout << "Original Linked List: ";
+    display(head);
+
+    // Remove duplicates from the linked list
+    removeDuplicates(head);
+
+    // Display the linked list after removing duplicates
+    cout << "Linked List after removing duplicates: ";
+    display(head);
+
+    return 0;
+}
