@@ -1,0 +1,37 @@
+#include<bits/stdc++.h>
+using namespace std;
+class  node{
+    public:
+    int data;
+    node* next;
+    node(int data1,node* next1){
+        data=data1;
+        next=next1;
+    }
+    node(int data1){
+        data=data1;
+        next=nullptr;
+    }
+};
+void display(node*head){
+    if(head==nullptr){
+    cout<<"Khali che bhaiband"<<endl;
+        return;
+    }
+    else
+    {
+        node* temp=head;
+        while(temp!=nullptr){
+            cout<<temp->data<<endl;
+            temp=temp->next;
+        }
+    }
+}
+    
+//}
+int main(){
+    node*head=new node(10);// node1 letsay// ab is node ka data 10 hai par next me to nullptr hi hai
+    head->next=new node(20);//node2 let say//ab node1 ke next me jo nullptr tha ab node2 ke address se replace ho gaya
+    head->next->next=new node(30);
+    display(head);
+}
