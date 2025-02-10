@@ -1,0 +1,164 @@
+#include<iostream>
+using namespace std;
+
+// Define a class for the Node of a doubly linked list
+class Node {
+public:
+    int data;
+    Node* next;
+    Node* prev;
+    
+    Node(int value) {
+        data = value;
+        next = nullptr;
+        prev = nullptr;
+    }
+};
+
+// Function to display the linked list
+void display(Node* head) {
+    if (head == nullptr) {
+        cout << "The list is empty." << endl;
+        return;
+    }
+    
+    Node* current = head;
+    while (current != nullptr) {
+        cout << current->data << " <-> ";
+        current = current->next;
+    }
+    cout << "NULL" << endl;
+}
+
+// Function to insert a node at the beginning of the list
+Node* insertAtFirst(Node* head, int new_data) {
+    Node* new_node = new Node(new_data);
+    
+    // Make the new node point to the current head
+    new_node->next = head;
+    
+    // Make the current head's previous pointer point to the new node, if it exists
+    if (head != nullptr) {
+        head->prev = new_node;
+    }
+    
+    // The new node becomes the new head
+    return new_node;
+}
+
+// Function to insert a node at the end of the list
+Node* insertAtEnd(Node* head, int new_data) {
+    Node* new_node = new Node(new_data);
+    Node* last = head;
+    
+    // If the list is empty, make the new node the head
+    if (head == nullptr) {
+        return new_node;
+    }
+    
+    // Traverse to the last node
+    while (last->next != nullptr) {
+        last = last->next;
+    }
+    
+    // Make the last node's next point to the new node
+    last->next = new_node;
+    
+    // Make the new node's prev point to the last node
+    new_node->prev = last;
+    
+    return head;
+}
+
+// Function to insert a node in the middle of the list
+Node* insertAtMiddle(Node* head, int new_data) {
+    if (head == nullptr) {
+        cout << "List is empty." << endl;
+        return head;
+    }
+
+    Node* slow = head;
+    Node* fast = head;
+    
+    // Traverse to the middle node
+    while (fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    
+    // Insert the new node after the middle node
+    Node* new_node = new Node(new_data);
+    new_node->next = slow->next;
+    new_node->prev = slow;
+    
+    if (slow->next != nullptr) {
+        slow->next->prev = new_node;
+    }
+    
+    slow->next = new_node;
+    
+    return head;
+}
+
+// Function to insert a node after a given node
+Node* insertAfterNode(Node* head, Node* given_node, int new_data) {
+    if (given_node == nullptr) {
+        cout << "The given node is null." << endl;
+        return head;
+    }
+    
+    Node* new_node = new Node(new_data);
+    
+    new_node->next = given_node->next;
+    new_node->prev = given_node;
+    
+    if (given_node->next != nullptr) {
+        given_node->next->prev = new_node;
+    }
+    
+    given_node->next = new_node;
+    
+    return head;
+}
+
+int main() {
+    Node* head = nullptr;
+
+    // Insert data at the beginning
+    head = insertAtFirst(head, 10);
+    head = insertAtFirst(head, 20);
+    head = insertAtFirst(head, 30);
+    
+    // Display the list
+    cout << "List after inserting at the beginning:" << endl;
+    display(head);
+    
+    // Insert data at the end
+    head = insertAtEnd(head, 40);
+    head = insertAtEnd(head, 50);
+    
+    // Display the list
+    cout << "List after inserting at the end:" << endl;
+    display(head);
+    
+    // Insert data at the middle
+    head = insertAtMiddle(head, 60);
+    
+    // Display the list
+    cout << "List after inserting at the middle:" << endl;
+    display(head);
+    
+    // Insert data after a specific node (let's say after the node with value 40)
+    Node* given_node = head;
+    while (given_node != nullptr && given_node->data != 40) {
+        given_node = given_node->next;
+    }
+    
+    if (given_node != nullptr) {
+        head = insertAfterNode(head, given_node, 70);
+    }
+    
+    // Display the list
+    cout << "List after inserting after node with data 40:" << endl;
+    display(head);
+}
