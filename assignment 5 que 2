@@ -1,0 +1,74 @@
+#include<iostream>
+using namespace std;
+
+#define MAXSIZE 100
+
+// Define the stack structure
+struct stack {
+    int stArr[MAXSIZE];  // Array to store stack elements
+    int top;  // Index of the top element
+};
+
+// Function to initialize the stack
+void create(stack &s) {
+    s.top = -1;  // Set top to -1 indicating stack is empty
+}
+
+// Function to check if the stack is full
+bool isFull(stack &s) {
+    return s.top == MAXSIZE - 1;
+}
+
+// Function to check if the stack is empty
+bool isEmpty(stack &s) {
+    return s.top == -1;
+}
+
+// Function to push an element onto the stack
+void push(stack &s, int val) {
+    if (isFull(s)) {
+        cout << "Stack Overflow! Cannot push " << val << endl;
+    } else {
+        s.stArr[++(s.top)] = val;  // Increment top and store value
+        cout << "Pushed " << val << " onto the stack." << endl;
+    }
+}
+
+// Function to pop an element from the stack
+int pop(stack &s) {
+    if (isEmpty(s)) {
+        cout << "Stack Underflow! Cannot pop from empty stack." << endl;
+        return -1;  // Return an invalid value
+    } else {
+        return s.stArr[(s.top)--];  // Return the top element and decrement top
+    }
+}
+
+// Function to peek the top element of the stack
+int peek(stack &s) {
+    if (isEmpty(s)) {
+        cout << "Stack is empty." << endl;
+        return -1;  // Return an invalid value
+    } else {
+        return s.stArr[s.top];  // Return the top element
+    }
+}
+
+int main() {
+    stack s;
+    create(s);  // Initialize the stack
+
+    push(s, 10);  // Push elements onto the stack
+    push(s, 20);
+    push(s, 30);
+
+    cout << "Top element is: " << peek(s) << endl;  // Peek the top element
+
+    cout << "Popped element: " << pop(s) << endl;  // Pop an element from the stack
+    cout << "Popped element: " << pop(s) << endl;
+
+    push(s, 40);
+    cout << "Top element is: " << peek(s) << endl;  // Peek the top element again
+
+    return 0;
+}
